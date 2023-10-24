@@ -7,7 +7,8 @@
 #####################################
 
 
-SL_Laplace_Approximation <- function(mu_prior, Sigma_prior, X, Y, tol){
+
+SL_Laplace_Approximation <- function(mu_prior, Sigma_prior, X, Y, tol, max_iter){
   
   # @param mu_prior: prior mean vector 
   # @param Sigma_prior: prior Sigma matrix
@@ -40,7 +41,7 @@ SL_Laplace_Approximation <- function(mu_prior, Sigma_prior, X, Y, tol){
     convergence_condition1 <- all(abs(Sigma_post-Sigma_old) < tol)
     convergence_condition2 <- all(abs(mu_post-mu_old) < tol)
     
-    if (convergence_condition1 && convergence_condition2) {
+    if ((convergence_condition1 && convergence_condition2) || iter==max_iter) {
       continue_indicator <- FALSE
     }
     
