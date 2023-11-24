@@ -54,3 +54,32 @@ SL_Laplace_Approximation <- function(mu_prior, Sigma_prior, X, Y, tol, max_iter)
               Sigma_post = Sigma_post, 
               iterations = iter))
 }
+
+############
+## Example
+############
+n <- 20
+p <- 1
+shape <- 0.5
+rate <- 0.5
+beta_true <- c(1,1)
+mu_prior <- rep(0,p+1)  
+r_gamma <- rgamma(p+1, shape = shape, rate = rate)
+Sigma_prior <- solve(diag(r_gamma)) #Sigma prior
+
+# Generate the design matrix 
+X <-matrix(data = NA, nrow = n, ncol = p)
+for (i in 1:p) {X[,i] <- runif(n, min = -2, max = 2) }
+intercept_col <- rep(1, n)  # Intercept column with ones
+X_inter <- cbind(intercept_col, X) # New desing matrix with intercept column
+
+# Parameter theta
+theta <- X_inter %*% beta_true 
+  
+# Generate the response vector from binomial or Poisson distidution
+Y <- rbinom(n, 1, exp(theta)/(1+exp(theta)))
+
+SL_Laplace_Approximation(mu_prior, Sigma_prior, X_inter, Y, tol=1e-5, max_iter=10000)
+  
+  
+  
